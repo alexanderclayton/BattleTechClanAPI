@@ -7,7 +7,7 @@ export const getPeople = async (req: Request, res: Response) => {
     if (!result) {
       return res.status(400).json({ message: "Unable to fetch people" });
     }
-    res.status(200).json(result);
+    res.status(200).json(result.recordset);
   } catch (error) {
     console.error("Unable to fetch people:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -16,9 +16,9 @@ export const getPeople = async (req: Request, res: Response) => {
 
 export const addPeople = async (req: Request, res: Response) => {
   try {
-    const { name } = req.body;
-    if (!name) {
-      return res.status(400).json({ message: "Must include a name" });
+    const { id, name } = req.body;
+    if (!id || !name) {
+      return res.status(400).json({ message: "Must include an ID and name" });
     }
     const addedPerson = await sql.query(
       `INSERT INTO People 
